@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<bean id="calculator" class="com.dgut.spring.aop.xml.Calculator"></bean>
+	<bean id="myAspect" class="com.dgut.spring.aop.xml.MyAspect"></bean>
+	<bean id="validationAspect" class="com.dgut.spring.aop.xml.ValidationAspect"></bean>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.dgut.spring.aop.xml.Calculator.*(..))" id="myPointCut"/>
+		<aop:aspect ref="myAspect" order="2">
+			<aop:before method="beforeAnnounce" pointcut-ref="myPointCut"/>
+			<aop:after method="afterAnnounce" pointcut-ref="myPointCut"/>
+			<aop:after-returning method="afterReturnAnnounce" pointcut-ref="myPointCut" returning="result"/>
+			<aop:after-throwing method="afterThrowingAnnounce" pointcut-ref="myPointCut" throwing="ex"/>
+			<!-- 
+			<aop:around method="aroundAnnounce" pointcut-ref="myPointCut"/>
+			 -->
+		</aop:aspect>
+		<aop:aspect ref="validationAspect" order="1">
+			<aop:before method="beforeAnnounce" pointcut-ref="myPointCut"/>
+		</aop:aspect>
+	</aop:config>
+
+
+</beans>
